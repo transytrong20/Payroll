@@ -1,0 +1,139 @@
+﻿@model PayrollModel
+@{
+    //PayrollModel SalaryNet = (PayrollModel)ViewBag.SalaryNet;
+}
+@{
+    Html.BeginForm("InputIncome", "Payroll", FormMethod.Post);
+    <body style="display: flex; justify-content: center; align-items: center; flex-direction: column; margin-top:50px">
+        <div class="box-white box-salary">
+            <h4>CÔNG CỤ TÍNH LƯƠNG</h4>
+            <div class="salary-cal-form">
+                <div class="form-group">
+                    <label>Thu nhập: </label><input asp-for="Income" id="Income" type="text" maxlength="15" />
+                </div>
+                <div style="margin-top:20px" class="form-group">
+                    <label>Đóng bảo hiểm:</label>
+                    <label class="radio-row">
+                        <input asp-for="OnOfficialSalary" type="radio" name="insurance" value="full" checked>
+                        Trên lương chính thức
+                    </label>
+                    <label style="padding-left:20px" class="radio-row">
+                        <input asp-for="Other" type="radio" name="insurance" value="other">
+                        Khác
+                    </label>
+                    <input type="text" id="Other" maxlength="15" class="not-allow" />
+                </div>
+                <div style="margin-top:20px" class="form-group">
+                    <label>Vùng:</label>
+                    <label class="dropdown">
+                        <select asp-for="Region" id="zone" style="width:60px">
+                            <option value="1" selected>1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select>
+                    </label>
+                    <label style="padding-left:30px" class="ml-10">Số người phụ thuộc:</label>
+                    <input asp-for="NumberOfDependents" id="numDep" type="text" maxlength="3" style="width:70px" />
+                </div>
+                <div class="form-group" style="margin:30px">
+                    <a id="btnGrossToNet" class="btn btn-salary" style="background:red, "><input type="submit" value="PAYROLL" /></a>
+                </div>
+            </div>
+        </div>
+    </body>
+}
+<body>
+    <div class="salary-cal-result">
+        <div class="form-group" id="gross-net-result"></div>
+
+        <div class="row form-group">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                <h6 style="margin: 0 0 10px 0">GROSS TO NET</h6>
+                <div class="wrap-row row-title">
+                    <strong>LƯƠNG GROSS: </strong>
+                    <strong id="result-gross-salary" class="result-value">@ViewBag.gross </strong>
+                </div>
+                <div class="wrap-row row-content">
+                    Bảo hiểm xã hội: <span id="result-social-insur" class="result-value"> @ViewBag.SocialInsurance</span>
+                </div>
+                <div class="wrap-row row-content">
+                    Bảo hiểm y tế: <span id="result-heal-insur" class="result-value"> @ViewBag.HealthInsurance</span>
+                </div>
+                <div class="wrap-row row-content">
+                    Bảo hiểm thất nghiệp: <span id="result-unemp-insur" class="result-value"> @ViewBag.UnemploymentInsurance </span>
+                </div>
+
+                <div class="wrap-row row-title">
+                    <strong>THU NHẬP TRƯỚC THUẾ: </strong>
+                    <strong id="result-salary-before-tax" class="result-value">@ViewBag.IncomeBeforeTax</strong>
+                </div>
+                <div class="wrap-row row-content">
+                    Giảm trừ gia cảnh bản thân: <span id="result-per-allow" class="result-value"> @ViewBag.reducepersonalcircumstances </span>
+                </div>
+                <div class="wrap-row row-content">
+                    Giảm trừ người phụ thuộc: <span id="result-dep-allow" class="result-value"> @ViewBag.dependencydeduction </span>
+                </div>
+
+                <div class="wrap-row row-title">
+                    <strong>THU NHẬP CHỊU THUẾ: </strong>
+                    <strong id="result-taxable-salary" class="result-value"> @ViewBag.IncomeTaxes</strong>
+                </div>
+                <div class="wrap-row row-content">
+                    Thuế thu nhập cá nhân:  <span id="result-per-tax" class="result-value"> @ViewBag.PersonalIncomeTax</span>
+                </div>
+
+                <div class="wrap-row row-title" style="color:#ed1c24">
+                    <strong>LƯƠNG NET:</strong>
+                    <strong class="result-value" id="result-net-salary"> @ViewBag.SalaryNet </strong>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="margin-top:50px" class="salary-cal-result">
+        <div class="form-group" id="gross-net-result"></div>
+        <div class="row form-group">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                <h6 style="margin: 0 0 10px 0">NET TO GROSS</h6>
+                <div class="wrap-row row-title">
+                    <strong>LƯƠNG GROSS: </strong>
+                    <strong id="result-gross-salary" class="result-value"> @ViewBag.SalaryGross </strong>
+                </div>
+                <div class="wrap-row row-content">
+                    Bảo hiểm xã hội: <span id="result-social-insur" class="result-value"> @ViewBag.SocialInsuranceGross</span>
+                </div>
+                <div class="wrap-row row-content">
+                    Bảo hiểm y tế:  <span id="result-heal-insur" class="result-value"> @ViewBag.HealthInsuranceGross</span>
+                </div>
+                <div class="wrap-row row-content">
+                    Bảo hiểm thất nghiệp:  <span id="result-unemp-insur" class="result-value"> @ViewBag.UnemploymentInsuranceGross</span>
+                </div>
+
+                <div class="wrap-row row-title">
+                    <strong>THU NHẬP TRƯỚC THUẾ:</strong>
+                    <strong id="result-salary-before-tax" class="result-value"> @ViewBag.TaxCollectedBeforeTaxs</strong>
+                </div>
+                <div class="wrap-row row-content">
+                    Giảm trừ gia cảnh bản thân: <span id="result-per-allow" class="result-value"> @ViewBag.reducepersonalcircumstances</span>
+                </div>
+                <div class="wrap-row row-content">
+                    Giảm trừ người phụ thuộc: <span id="result-dep-allow" class="result-value"> @ViewBag.dependencydeduction </span>
+                </div>
+
+                <div class="wrap-row row-title">
+                    <strong>THU NHẬP CHỊU THUẾ:</strong>
+                    <strong id="result-taxable-salary" class="result-value"> @ViewBag.IncomeBeforeTaxs</strong>
+                </div>
+                <div class="wrap-row row-content">
+                    Thuế thu nhập cá nhân: <span id="result-per-tax" class="result-value"> @ViewBag.personalincometaxs </span>
+                </div>
+
+                <div class="wrap-row row-title" style="color:#ed1c24">
+                    <strong>LƯƠNG NET:</strong>
+                    <strong class="result-value" id="result-net-salary"> @ViewBag.gross</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
