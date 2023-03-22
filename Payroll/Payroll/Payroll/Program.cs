@@ -19,9 +19,9 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Payroll}/{action=Index}/{id?}");
-
 
 app.Run();
