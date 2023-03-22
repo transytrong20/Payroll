@@ -53,6 +53,10 @@ namespace Payroll.Controllers
             double IncomeBeforeTax = model.Income - Insurance; // thu nhập trước thuế
 
             double IncomeTaxes = IncomeBeforeTax - 11000000 - (model.NumberOfDependents * 4400000); //thu nhập chịu thuế
+            if(IncomeTaxes < 0)
+            {
+                IncomeTaxes = 0;
+            }
 
             double PersonalIncomeTax = IncomeTaxes; //Thuế thu nhập cá nhân
             if (IncomeTaxes < 5000001)
@@ -89,6 +93,10 @@ namespace Payroll.Controllers
 
             //Net to Gross
             double ConvertedIncome = model.Income - 11000000 - (model.NumberOfDependents * 4400000); //thu nhập quy đổi
+            if (ConvertedIncome < 0)
+            {
+                ConvertedIncome = 0;
+            }
 
             double IncomeBeforeTaxs = ConvertedIncome; //thu nhập chịu thuế
             if (ConvertedIncome < 4750001)
@@ -119,8 +127,11 @@ namespace Payroll.Controllers
             {
                 IncomeBeforeTaxs = (ConvertedIncome - 9850000) / 0.65;
             }
+            
 
-            double TaxCollectedBeforeTaxs = IncomeBeforeTaxs + 11000000 + model.OnOfficialSalary*4400000; //Thu nhập trước thuế
+
+            double giamtru = 11000000;
+            double TaxCollectedBeforeTaxs = IncomeBeforeTaxs + giamtru + model.OnOfficialSalary*4400000; //Thu nhập trước thuế
 
 
             double SalaryGross = TaxCollectedBeforeTaxs; //Net to gosss
